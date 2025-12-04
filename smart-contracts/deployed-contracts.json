@@ -1,0 +1,51 @@
+{
+  "network": {
+    "name": "sepolia",
+    "chainId": "11155111",
+    "rpcUrl": "https://sepolia.infura.io/v3/12847eba0a8e4f49980a9b456e837a7d"
+  },
+  "deployer": {
+    "address": "0xC5b818f451453Cc600045daEa78A087C6dCA2984",
+    "balance": "0.04872536924123751"
+  },
+  "deployedAt": "2025-11-11T00:11:47.560Z",
+  "contracts": {
+    "grantRegistry": {
+      "address": "0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17",
+      "contractName": "GrantRegistry",
+      "deployer": "0xC5b818f451453Cc600045daEa78A087C6dCA2984",
+      "deployedAt": "2025-11-11T00:11:47.560Z",
+      "network": "sepolia",
+      "chainId": "11155111",
+      "blockNumber": "9603230"
+    },
+    "grantTreasury": {
+      "address": "0x71C74477ae190d7eeF762d01AC091D021a5AbAa6",
+      "contractName": "GrantTreasury",
+      "deployer": "0xC5b818f451453Cc600045daEa78A087C6dCA2984",
+      "deployedAt": "2025-11-11T00:11:47.560Z",
+      "network": "sepolia",
+      "chainId": "11155111",
+      "blockNumber": "9603231"
+    },
+    "agentVoting": {
+      "address": "0x19Fe9e5e12fc5C1657E299aC69878965367A294D",
+      "contractName": "AgentVoting",
+      "deployer": "0xC5b818f451453Cc600045daEa78A087C6dCA2984",
+      "deployedAt": "2025-11-11T00:11:47.560Z",
+      "network": "sepolia",
+      "chainId": "11155111",
+      "blockNumber": "9603232"
+    }
+  },
+  "contractAddresses": {
+    "GrantRegistry": "0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17",
+    "GrantTreasury": "0x71C74477ae190d7eeF762d01AC091D021a5AbAa6",
+    "AgentVoting": "0x19Fe9e5e12fc5C1657E299aC69878965367A294D"
+  },
+  "explorerUrls": {
+    "GrantRegistry": "https://sepolia.etherscan.io/address/0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17",
+    "GrantTreasury": "https://sepolia.etherscan.io/address/0x71C74477ae190d7eeF762d01AC091D021a5AbAa6",
+    "AgentVoting": "https://sepolia.etherscan.io/address/0x19Fe9e5e12fc5C1657E299aC69878965367A294D"
+  }
+}

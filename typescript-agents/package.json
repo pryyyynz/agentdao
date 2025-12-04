@@ -1,0 +1,51 @@
+{
+  "name": "grantify-typescript-agents",
+  "version": "1.0.0",
+  "description": "TypeScript agents for Grantify grant evaluation system",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rimraf dist",
+    "example:intake": "ts-node examples/intake-example.ts",
+    "example:technical": "ts-node examples/technical-example.ts",
+    "example:impact": "ts-node examples/impact-example.ts",
+    "example:dd": "ts-node examples/due-diligence-example.ts",
+    "example:budget": "ts-node examples/budget-example.ts",
+    "example:community": "ts-node examples/community-example.ts",
+    "example:coordinator": "ts-node examples/voting-coordinator-example.ts",
+    "example:executor": "ts-node examples/executor-example.ts"
+  },
+  "keywords": [
+    "blockchain",
+    "dao",
+    "agents",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "ethers": "^5.7.2",
+    "groq-sdk": "^0.4.0",
+    "ipfs-http-client": "^60.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.3.0"
+  }
+}
