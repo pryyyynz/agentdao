@@ -4,11 +4,30 @@ import { PageLayout } from "@/components/PageLayout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAuth } from "@/context/AuthContext";
 import { useGrants, useMilestones } from "@/hooks/useApi";
-import { FileText, Loader2, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { FileText, Loader2, ArrowRight, ChevronDown, ChevronUp, CheckCircle2, XCircle, Clock, AlertCircle } from "lucide-react";
 import { getStatusColor, formatEther, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import MilestoneProgressCard from "@/components/grant-detail/MilestoneProgressCard";
+
+// Helper to get status icon
+function getStatusIcon(status: string) {
+  const iconClass = "h-3.5 w-3.5";
+  switch (status.toLowerCase()) {
+    case "approved":
+      return <CheckCircle2 className={iconClass} />;
+    case "rejected":
+      return <XCircle className={iconClass} />;
+    case "pending":
+      return <Clock className={iconClass} />;
+    case "evaluating":
+      return <Loader2 className={`${iconClass} animate-spin`} />;
+    case "under_review":
+      return <AlertCircle className={iconClass} />;
+    default:
+      return <Clock className={iconClass} />;
+  }
+}
 
 export default function GrantsPage() {
   return (
@@ -21,7 +40,7 @@ export default function GrantsPage() {
 function GrantsPageContent() {
   const { isAuthenticated } = useAuth();
   const { data: grants, isLoading } = useGrants();
-  const [expandedGrantId, setExpandedGrantId] = useState<string | null>(null);
+  const [expandedGrantId, setExpandedGrantId] = useState<number | null>(null);
 
   if (!isAuthenticated) {
     return null; // ProtectedRoute handles redirect
@@ -95,11 +114,12 @@ function GrantItem({ grant, isExpanded, onToggleExpand }: GrantItemProps) {
                 {grant.title}
               </h3>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs ${getStatusColor(
                   grant.status
                 )}`}
               >
-                {grant.status}
+                {getStatusIcon(grant.status)}
+                <span>{grant.status.replace(/_/g, ' ').toUpperCase()}</span>
               </span>
               {grant.has_milestones && (
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">

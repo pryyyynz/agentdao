@@ -27,14 +27,16 @@ export function useGrants() {
   return useQuery<Grant[]>({
     queryKey: [QUERY_KEYS.grants],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<Grant[]>>("/api/v1/grants");
+      const response = await api.get<ApiResponse<Grant[] | PaginatedResponse<Grant>>>("/api/v1/grants");
+      const data = response.data.data;
+      
       // Backend now filters by user automatically, but handle both response formats
-      if (Array.isArray(response.data.data)) {
-        return response.data.data;
+      if (Array.isArray(data)) {
+        return data;
       }
       // Handle paginated response
-      if (response.data.data?.data) {
-        return response.data.data.data;
+      if (data && 'data' in data && Array.isArray(data.data)) {
+        return data.data;
       }
       return [];
     },
@@ -80,7 +82,7 @@ export function useAgentActivities(limit: number = 50) {
       );
       return response.data.data || [];
     },
-    refetchInterval: 5000, // Refetch every 5 seconds for real-time updates
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 }
 

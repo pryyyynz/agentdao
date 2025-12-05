@@ -10,11 +10,35 @@ import {
   ExternalLink,
   Github,
   Globe,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Loader,
+  AlertCircle,
 } from "lucide-react";
 import { getStatusColor, formatEther, formatDate, shortenAddress } from "@/lib/utils";
 
 interface GrantCardProps {
   grant: Grant;
+}
+
+// Helper to get status icon
+function getStatusIcon(status: string) {
+  const iconClass = "h-3.5 w-3.5";
+  switch (status.toLowerCase()) {
+    case "approved":
+      return <CheckCircle2 className={iconClass} />;
+    case "rejected":
+      return <XCircle className={iconClass} />;
+    case "pending":
+      return <Clock className={iconClass} />;
+    case "evaluating":
+      return <Loader className={`${iconClass} animate-spin`} />;
+    case "under_review":
+      return <AlertCircle className={iconClass} />;
+    default:
+      return <Clock className={iconClass} />;
+  }
 }
 
 export default function GrantCard({ grant }: GrantCardProps) {
@@ -29,11 +53,12 @@ export default function GrantCard({ grant }: GrantCardProps) {
                 {grant.title}
               </h3>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs ${getStatusColor(
                   grant.status
                 )}`}
               >
-                {grant.status.charAt(0).toUpperCase() + grant.status.slice(1)}
+                {getStatusIcon(grant.status)}
+                <span>{grant.status.replace(/_/g, ' ').charAt(0).toUpperCase() + grant.status.replace(/_/g, ' ').slice(1)}</span>
               </span>
             </div>
             <p className="text-sm text-gray-600 line-clamp-2">

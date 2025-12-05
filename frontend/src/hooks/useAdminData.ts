@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 import {
   SystemHealth,
   AgentStatus,
@@ -15,6 +16,9 @@ import {
  * React Query hooks for fetching and mutating admin dashboard data
  * Currently uses mock data, replace with real API calls in production
  */
+
+// Get API base URL from environment
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // Mock data generators
 function generateMockSystemHealth(): SystemHealth {
@@ -59,9 +63,8 @@ function generateMockTreasuryInfo(): TreasuryInfo {
   const lockedBalance = totalBalance * (Math.random() * 0.3);
   
   return {
-    total_balance: totalBalance.toFixed(2),
-    available_balance: (totalBalance - lockedBalance).toFixed(2),
-    locked_balance: lockedBalance.toFixed(2),
+    blockchain_balance: totalBalance.toFixed(2),
+    total_approved_grants: lockedBalance.toFixed(2),
     pending_transfers: [
       {
         to: '0x1234567890123456789012345678901234567890',
@@ -153,13 +156,15 @@ export function useSystemHealth() {
   return useQuery<SystemHealth>({
     queryKey: ['admin', 'system-health'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/system-health');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/system-health`);
       if (!response.ok) {
         throw new Error('Failed to fetch system health');
       }
       return response.json();
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 60000, // Refresh every 60 seconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -167,13 +172,15 @@ export function useAgentStatuses() {
   return useQuery<AgentStatus[]>({
     queryKey: ['admin', 'agent-statuses'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/agent-statuses');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/agent-statuses`);
       if (!response.ok) {
         throw new Error('Failed to fetch agent statuses');
       }
       return response.json();
     },
-    refetchInterval: 15000, // Refresh every 15 seconds
+    refetchInterval: 60000, // Refresh every 60 seconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -181,13 +188,15 @@ export function useTreasuryInfo() {
   return useQuery<TreasuryInfo>({
     queryKey: ['admin', 'treasury-info'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/treasury-info');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/treasury-info`);
       if (!response.ok) {
         throw new Error('Failed to fetch treasury info');
       }
       return response.json();
     },
-    refetchInterval: 30000,
+    refetchInterval: 60000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -195,13 +204,15 @@ export function usePendingActions() {
   return useQuery<PendingAction[]>({
     queryKey: ['admin', 'pending-actions'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/pending-actions');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/pending-actions`);
       if (!response.ok) {
         throw new Error('Failed to fetch pending actions');
       }
       return response.json();
     },
-    refetchInterval: 10000, // Refresh every 10 seconds
+    refetchInterval: 60000, // Refresh every 60 seconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -219,14 +230,16 @@ export function useSystemLogs(filters?: {
       if (filters?.limit) params.append('limit', filters.limit.toString());
       
       const response = await fetch(
-        `http://localhost:8000/api/v1/admin/system-logs?${params.toString()}`
+        `${API_BASE_URL}/api/v1/admin/system-logs?${params.toString()}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch system logs');
       }
       return response.json();
     },
-    refetchInterval: 5000, // Refresh every 5 seconds
+    refetchInterval: 60000, // Refresh every 60 seconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -243,7 +256,7 @@ export function useUpdateAgentStatus() {
       const agentName = params.agentId.replace('agent-', '');
       
       const response = await fetch(
-        `http://localhost:8000/api/v1/admin/agents/${agentName}/status`,
+        `${API_BASE_URL}/api/v1/admin/agents/${agentName}/status`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -281,7 +294,7 @@ export function useUpdateAgentWeight() {
       const agentName = params.agentId.replace('agent-', '');
       
       const response = await fetch(
-        `http://localhost:8000/api/v1/admin/agents/${agentName}/weight`,
+        `${API_BASE_URL}/api/v1/admin/agents/${agentName}/weight`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -311,7 +324,7 @@ export function useRegisterAgent() {
   return useMutation({
     mutationFn: async (agent: AgentRegistration) => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/agents/register',
+        `${API_BASE_URL}/api/v1/admin/agents/register`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -345,7 +358,7 @@ export function useApproveAction() {
   return useMutation({
     mutationFn: async (actionId: string) => {
       const response = await fetch(
-        `http://localhost:8000/api/v1/admin/pending-actions/${actionId}/approve`,
+        `${API_BASE_URL}/api/v1/admin/pending-actions/${actionId}/approve`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -377,7 +390,7 @@ export function useRejectAction() {
   return useMutation({
     mutationFn: async (actionId: string) => {
       const response = await fetch(
-        `http://localhost:8000/api/v1/admin/pending-actions/${actionId}/reject`,
+        `${API_BASE_URL}/api/v1/admin/pending-actions/${actionId}/reject`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -408,7 +421,7 @@ export function useEmergencyStop() {
   return useMutation({
     mutationFn: async (reason: string) => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/system/emergency-stop',
+        `${API_BASE_URL}/api/v1/admin/system/emergency-stop`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -439,7 +452,7 @@ export function usePauseSystem() {
   return useMutation({
     mutationFn: async (params: { paused: boolean; reason: string }) => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/system/pause',
+        `${API_BASE_URL}/api/v1/admin/system/pause`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -469,7 +482,7 @@ export function useSystemStatus() {
   return useQuery({
     queryKey: ['admin', 'system-status'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/system/status');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/system/status`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch system status');
@@ -486,7 +499,7 @@ export function useSystemStatus() {
         updated_by: string | null;
       }>;
     },
-    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchInterval: 60000, // Refetch every 60 seconds
   });
 }
 
@@ -496,7 +509,7 @@ export function useDeactivateEmergencyStop() {
   return useMutation({
     mutationFn: async () => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/system/emergency-stop?admin_user=admin',
+        `${API_BASE_URL}/api/v1/admin/system/emergency-stop?admin_user=admin`,
         {
           method: 'DELETE',
         }
@@ -525,7 +538,7 @@ export function useEmergencyWithdrawal() {
       reason: string 
     }) => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/system/emergency-withdrawal',
+        `${API_BASE_URL}/api/v1/admin/system/emergency-withdrawal`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -556,7 +569,7 @@ export function usePendingWithdrawals() {
   return useQuery({
     queryKey: ['admin', 'pending-withdrawals'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:8000/api/v1/admin/system/emergency-withdrawal/pending');
+      const response = await fetch(`${API_BASE_URL}/api/v1/admin/system/emergency-withdrawal/pending`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch pending withdrawals');
@@ -564,7 +577,7 @@ export function usePendingWithdrawals() {
       
       return response.json();
     },
-    refetchInterval: 10000, // Refetch every 10 seconds
+    refetchInterval: 60000, // Refetch every 60 seconds
   });
 }
 
@@ -578,7 +591,7 @@ export function useApproveWithdrawal() {
       comment?: string;
     }) => {
       const response = await fetch(
-        'http://localhost:8000/api/v1/admin/system/emergency-withdrawal/approve',
+        `${API_BASE_URL}/api/v1/admin/system/emergency-withdrawal/approve`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

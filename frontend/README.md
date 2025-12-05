@@ -1,6 +1,10 @@
 # Grantify Frontend
 
+🚀 **Live**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+
 Next.js 16 web application for grant submission, tracking, and agent activity visualization.
+
+> **Note**: This README covers the **production deployment**. For local development setup, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
@@ -17,60 +21,47 @@ Next.js 16 web application for grant submission, tracking, and agent activity vi
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Production Access
 
-### Prerequisites
+### Live Application
 
-- Node.js 18+ and npm
-- Running Python services (port 8000)
-- Deployed smart contracts
-- Ethereum wallet with Sepolia testnet ETH
+**URL**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
 
-### Installation
+**Prerequisites**:
+- MetaMask or compatible Web3 wallet
+- Sepolia testnet configured
+- Sepolia ETH for gas fees ([Get testnet ETH](https://sepoliafaucet.com/))
 
-```bash
-cd frontend
-npm install
-```
+### Production Configuration
 
-### Environment Configuration
-
-Create `.env.local`:
+The frontend is deployed on **Vercel** with the following environment:
 
 ```env
-# Thirdweb Configuration
-NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_thirdweb_client_id
-
-# Smart Contract Addresses (from deployed-contracts.json)
+NEXT_PUBLIC_API_URL=https://agentdao.onrender.com
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=[configured]
 NEXT_PUBLIC_GRANT_REGISTRY_ADDRESS=0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17
 NEXT_PUBLIC_GRANT_TREASURY_ADDRESS=0x71C74477ae190d7eeF762d01AC091D021a5AbAa6
 NEXT_PUBLIC_AGENT_VOTING_ADDRESS=0x19Fe9e5e12fc5C1657E299aC69878965367A294D
-
-# Backend API
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# MCP Server
-NEXT_PUBLIC_MCP_URL=http://localhost:3001
-
-# Network Configuration
 NEXT_PUBLIC_CHAIN_ID=11155111
 NEXT_PUBLIC_NETWORK_NAME=sepolia
 ```
 
-### Development Server
+### Local Development
+
+To run the frontend locally or contribute:
 
 ```bash
-npm run dev
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+cd frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/frontend) for:
+- Installation instructions
+- Environment setup
+- Development server
+- Testing procedures
 
 ---
 
@@ -297,45 +288,64 @@ const form = useForm({
 
 ## 🧪 Testing
 
-### Run Tests
+### Production Testing
 
-```bash
-npm test
-```
+The live application has been tested for:
+- ✅ Grant submission flow
+- ✅ Wallet connection (MetaMask, WalletConnect)
+- ✅ Real-time agent activity updates
+- ✅ Admin dashboard functionality
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Email OTP authentication
 
-### Testing Guide
+### Test the Platform
 
-See [`TESTING-GUIDE.md`](TESTING-GUIDE.md) for comprehensive testing checklist including:
-- Form validation tests
-- Component interaction tests
-- API integration tests
-- Responsive design tests
+Try it yourself at [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+
+### Local Testing & Development
+
+For running tests locally, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local) which includes:
+- Unit test suite
+- Integration tests
+- Component testing with React Testing Library
+- E2E testing guide
+
+See [`TESTING-GUIDE.md`](TESTING-GUIDE.md) for comprehensive testing checklist.
 
 ---
 
 ## 🚢 Deployment
 
-### Vercel (Recommended)
+### Current Production Deployment
 
-1. Push to GitHub
-2. Import project in Vercel
-3. Add environment variables
+**Platform**: Vercel  
+**URL**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)  
+**Status**: ✅ Live
+
+**Deployment Details**:
+- Automatic deployments from `main` branch
+- Environment variables configured in Vercel dashboard
+- Edge functions for optimal performance
+- CDN distribution globally
+
+### Deploying Your Own Instance
+
+#### Option 1: Vercel (Recommended)
+
+1. Fork this repository
+2. Import to Vercel: [https://vercel.com/new](https://vercel.com/new)
+3. Add environment variables:
+   - `NEXT_PUBLIC_API_URL`
+   - `NEXT_PUBLIC_THIRDWEB_CLIENT_ID`
+   - `NEXT_PUBLIC_GRANT_REGISTRY_ADDRESS`
+   - `NEXT_PUBLIC_GRANT_TREASURY_ADDRESS`
+   - `NEXT_PUBLIC_AGENT_VOTING_ADDRESS`
+   - `NEXT_PUBLIC_CHAIN_ID`
 4. Deploy
 
-```bash
-# Or use Vercel CLI
-npm i -g vercel
-vercel
-```
+#### Option 2: Self-Hosted
 
-### Self-Hosted
-
-```bash
-npm run build
-npm start
-```
-
-Set environment variables in your hosting platform.
+For self-hosting instructions, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
@@ -373,36 +383,37 @@ Strict mode enabled with path aliases:
 
 ## 🐛 Troubleshooting
 
-### Contract Connection Issues
+### Common Issues
 
-```bash
-# Verify contract addresses in .env.local
-# Ensure wallet is connected to Sepolia testnet
-# Check Python services are running on port 8000
-```
+#### Wallet Won't Connect
 
-### Build Errors
+- Ensure you're on Sepolia testnet
+- Try disconnecting and reconnecting
+- Clear browser cache
+- Update MetaMask to latest version
 
-```bash
-# Clear Next.js cache
-rm -rf .next
+#### Transaction Fails
 
-# Reinstall dependencies
-rm -rf node_modules package-lock.json
-npm install
-```
+- Check you have Sepolia ETH for gas
+- Verify contract addresses are correct
+- Check network congestion: [Sepolia Explorer](https://sepolia.etherscan.io/)
 
-### Wallet Connection Problems
+#### Page Not Loading
 
-- Ensure Thirdweb client ID is valid
-- Check wallet is on correct network (Sepolia)
-- Try disconnecting and reconnecting wallet
+- Check your internet connection
+- Try clearing browser cache
+- Verify backend services are up: [https://agentdao.onrender.com/health](https://agentdao.onrender.com/health)
 
-### API Request Failures
+#### Grant Submission Stuck
 
-- Verify Python services are running: http://localhost:8000/health
-- Check CORS settings in Python services
-- Verify API URL in `.env.local`
+- Check browser console for errors (F12)
+- Ensure all required fields are filled
+- Try refreshing and submitting again
+- Contact support if issue persists
+
+### Development Issues
+
+For local development troubleshooting, see the [`local` branch README`](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 

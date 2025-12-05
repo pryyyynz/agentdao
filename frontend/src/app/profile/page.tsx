@@ -18,7 +18,7 @@ export default function ProfilePage() {
 function ProfileContent() {
   const { user, linkWallet, unlinkWallet, updateProfile } = useAuth();
   const address = useAddress();
-  const { disconnect } = useDisconnect();
+  const disconnect = useDisconnect();
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState(user?.display_name || "");
   const [bio, setBio] = useState(user?.bio || "");
