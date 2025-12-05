@@ -1,6 +1,38 @@
 # Grantify Database
 
+📦 **Production Database: Supabase PostgreSQL**
+
 PostgreSQL 15+ database schema for grant management, AI agent evaluations, and milestone tracking.
+
+> **Note**: This README covers the **production database**. For local database setup, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
+
+---
+
+## 🚀 Production Database
+
+### Current Setup
+
+**Provider**: Supabase (PostgreSQL 15)  
+**Status**: ✅ Live and operational  
+**Connection**: Via DATABASE_URL environment variable
+
+**Features**:
+- Automatic backups
+- Connection pooling
+- SSL encryption
+- Real-time subscriptions (optional)
+- Built-in API access
+
+### Accessing Production Data
+
+Production database access is restricted to:
+- Python Backend ([https://agentdao.onrender.com](https://agentdao.onrender.com))
+- MCP Server ([https://agentdao-mcp-server.onrender.com](https://agentdao-mcp-server.onrender.com))
+
+Data can be viewed through:
+1. **Frontend**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+2. **Supabase Dashboard**: (Admin access only)
+3. **API Endpoints**: Via Python backend
 
 ---
 
@@ -40,25 +72,28 @@ PostgreSQL 15+ database schema for grant management, AI agent evaluations, and m
 
 ---
 
-## 🚀 Quick Setup
+## 📊 Local Database Setup
 
-### Prerequisites
-
-- PostgreSQL 15 or higher
-- `psql` command-line tool
-- Database user with CREATE privileges
-
-### Create Database
+For setting up a local development database:
 
 ```bash
-# Connect to PostgreSQL
-psql -U postgres
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+```
 
-# Create database
-CREATE DATABASE grantify;
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/database) for:
+- PostgreSQL installation
+- Database creation
+- Running migrations
+- Seeding test data
+- Backup and restore procedures
 
-# Create user (optional)
-CREATE USER grantify_user WITH PASSWORD 'your_secure_password';
+### Quick Reference
+
+```bash
+# Clone and switch to local branch
+git checkout local
 GRANT ALL PRIVILEGES ON DATABASE grantify TO grantify_user;
 ```
 

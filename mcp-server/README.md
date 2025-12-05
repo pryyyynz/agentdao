@@ -1,6 +1,10 @@
 # Grantify MCP Server
 
+🚀 **Live Server**: [https://agentdao-mcp-server.onrender.com](https://agentdao-mcp-server.onrender.com)
+
 Model Context Protocol orchestration server coordinating AI agent evaluations and blockchain interactions.
+
+> **Note**: This README covers the **production deployment**. For local development setup, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
@@ -40,65 +44,58 @@ The MCP server is the central nervous system of Grantify's AI agent council:
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Production Service
 
-### Prerequisites
+### Live Server
 
-- Node.js 18+
-- Running Python services (port 8000)
-- PostgreSQL database configured
+**Base URL**: `https://agentdao-mcp-server.onrender.com`  
+**Status**: ✅ Live on Render
 
-### Installation
-
-```bash
-cd mcp-server
-npm install
-```
-
-### Environment Configuration
-
-Create `.env`:
+### Production Configuration
 
 ```env
-# Server Configuration
-PORT=3001
-NODE_ENV=development
-
-# Python Services
-PYTHON_SERVICES_URL=http://localhost:8000
-PYTHON_API_KEY=your_api_key_here
-
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/grantify
-
-# Orchestrator Settings
+NODE_ENV=production
+PORT=10000
+PYTHON_SERVICES_URL=https://agentdao.onrender.com
+PYTHON_API_KEY=[configured]
+DATABASE_URL=postgresql://[supabase-connection-string]
 EVALUATION_TIMEOUT_MS=300000
 PARALLEL_EVALUATIONS=true
-APPROVAL_THRESHOLD=0.6
-
-# Health Monitoring
-HEALTH_CHECK_INTERVAL_MS=60000
-MILESTONE_CHECK_INTERVAL_MS=300000
-
-# Retry Configuration
-MAX_RETRIES=3
-RETRY_DELAY_MS=5000
 ```
 
-### Development Mode
+### API Endpoints
+
+#### Health Check
+```bash
+GET https://agentdao-mcp-server.onrender.com/health
+```
+
+#### Grant Workflow Status
+```bash
+GET https://agentdao-mcp-server.onrender.com/workflow/:grantId
+```
+
+#### Trigger Evaluation
+```bash
+POST https://agentdao-mcp-server.onrender.com/evaluate/:grantId
+```
+
+### Local Development
+
+To run the MCP server locally or contribute:
 
 ```bash
-npm run dev
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+cd mcp-server
 ```
 
-Server runs on http://localhost:3001
-
-### Production Build
-
-```bash
-npm run build
-npm start
-```
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/mcp-server) for:
+- Installation and setup
+- Environment configuration
+- Development server
+- Testing procedures
 
 ---
 
@@ -326,35 +323,28 @@ Returns list of registered agents with status.
 
 ## 🧪 Testing
 
-### Run Unit Tests
+### Production Testing
+
+Test the live server:
 
 ```bash
-npm test
+# Health check
+curl https://agentdao-mcp-server.onrender.com/health
+
+# Check agents
+curl https://agentdao-mcp-server.onrender.com/agents
+
+# Get stats
+curl https://agentdao-mcp-server.onrender.com/stats
 ```
 
-### Run Integration Tests
+### Local Testing
 
-```bash
-npm run test:integration
-```
-
-### Test Coverage
-
-```bash
-npm run test:coverage
-```
-
-### Manual Testing
-
-Use the example scripts in `/examples`:
-
-```bash
-# Test orchestrator
-npx ts-node examples/basic-orchestrator.ts
-
-# Test agent communication
-npx ts-node examples/agent-communication-demo.ts
-```
+For running unit tests and integration tests locally, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local) which includes:
+- Jest test suite
+- Integration tests
+- Example scripts
+- Mock data
 
 ---
 
@@ -488,98 +478,73 @@ Structured logging with timestamps:
 
 ## 🐛 Troubleshooting
 
-### Python Services Connection Error
+### Production Issues
+
+#### Server Not Responding
 
 ```bash
-# Check Python services are running
-curl http://localhost:8000/health
+# Check service health
+curl https://agentdao-mcp-server.onrender.com/health
 
-# Verify PYTHON_SERVICES_URL in .env
-echo $PYTHON_SERVICES_URL
+# Check agent status
+curl https://agentdao-mcp-server.onrender.com/agents
 ```
 
-### Agent Not Responding
+#### Python Services Connection Error
 
+Verify Python backend is responding:
 ```bash
-# Check agent health via API
-curl http://localhost:3001/agents
-
-# Restart orchestrator to re-register agents
-npm run dev
+curl https://agentdao.onrender.com/health
 ```
 
-### Workflow Stuck
+#### Workflow Stuck
 
+Check workflow status:
 ```bash
-# Check workflow status
-curl http://localhost:3001/workflow/123
-
-# Force re-evaluation
-curl -X POST http://localhost:3001/evaluate/123 \
-  -H "Content-Type: application/json" \
-  -d '{"force": true}'
+curl https://agentdao-mcp-server.onrender.com/workflow/{grantId}
 ```
 
-### Message Queue Overflow
+### Development Issues
 
-Increase timeout or enable parallel evaluations:
-
-```env
-EVALUATION_TIMEOUT_MS=600000  # 10 minutes
-PARALLEL_EVALUATIONS=true
-```
+For local development troubleshooting, see the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 
 ## 🚢 Deployment
 
-### Docker
+### Current Production Deployment
 
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --production
-COPY dist ./dist
-CMD ["node", "dist/http-server.js"]
-```
+**Platform**: Render  
+**URL**: [https://agentdao-mcp-server.onrender.com](https://agentdao-mcp-server.onrender.com)  
+**Status**: ✅ Live
 
-Build and run:
+**Deployment Details**:
+- Automatic deployments from `main` branch
+- Environment variables configured in Render dashboard
+- Health monitoring enabled
+- Auto-scaling based on load
 
-```bash
-docker build -t grantify-mcp .
-docker run -p 3001:3001 --env-file .env grantify-mcp
-```
+### Deploying Your Own Instance
 
-### Process Manager (PM2)
+#### Option 1: Render (Recommended)
 
-```bash
-npm install -g pm2
-pm2 start dist/http-server.js --name grantify-mcp
-pm2 logs grantify-mcp
-```
+1. Fork this repository
+2. Create new Web Service on [Render](https://render.com)
+3. Connect your GitHub repository
+4. Configure:
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm run start:http`
+   - **Node Version**: 18
+5. Add environment variables:
+   - `PYTHON_SERVICES_URL`
+   - `PYTHON_API_KEY`
+   - `DATABASE_URL`
+   - `MCP_HTTP_PORT` (set to 10000)
+6. Deploy
 
-### Systemd Service
+#### Option 2: Self-Hosted
 
-Create `/etc/systemd/system/grantify-mcp.service`:
-
-```ini
-[Unit]
-Description=Grantify MCP Server
-After=network.target
-
-[Service]
-Type=simple
-User=grantify
-WorkingDirectory=/opt/grantify/mcp-server
-Environment="NODE_ENV=production"
-EnvironmentFile=/opt/grantify/mcp-server/.env
-ExecStart=/usr/bin/node dist/http-server.js
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
+For Docker, PM2, systemd, or other deployment methods, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ---
 

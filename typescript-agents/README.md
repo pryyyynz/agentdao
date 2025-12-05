@@ -1,6 +1,10 @@
 # TypeScript Agents - Base Agent API
 
+🤖 **Production agents integrated with deployed contracts on Sepolia**
+
 This package provides the foundation for building grant evaluation agents in the AgentDAO system.
+
+> **Note**: This README covers the **production usage**. For local development and testing, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ## 🚀 Current Status
 
@@ -16,6 +20,29 @@ This package provides the foundation for building grant evaluation agents in the
 
 **Test Coverage:** 76 comprehensive test cases  
 **Lines of Code:** ~6,000+ production-ready TypeScript + 38 tests
+
+## 🚀 Production Deployment
+
+The TypeScript agents are integrated with:
+- **Smart Contracts**: Deployed on Sepolia (see addresses above)
+- **Python Services**: [https://agentdao.onrender.com](https://agentdao.onrender.com)
+- **MCP Server**: [https://agentdao-mcp-server.onrender.com](https://agentdao-mcp-server.onrender.com)
+- **Frontend**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+
+### Configuration
+
+Production agents connect to:
+```typescript
+const config = {
+  rpcUrl: 'https://sepolia.infura.io/v3/...',
+  contracts: {
+    registry: '0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17',
+    treasury: '0x71C74477ae190d7eeF762d01AC091D021a5AbAa6',
+    voting: '0x19Fe9e5e12fc5C1657E299aC69878965367A294D'
+  },
+  pythonServices: 'https://agentdao.onrender.com'
+};
+```
 
 ## Overview
 
@@ -40,9 +67,24 @@ BaseGrantAgent (Abstract)
     └── IPFSClient (content fetching)
 ```
 
-## Quick Start
+## Local Development & Testing
 
-### Run Example Scripts
+To run agents locally or contribute:
+
+```bash
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+cd typescript-agents
+```
+
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/typescript-agents) for:
+- Installation and setup
+- Running example scripts
+- Testing procedures
+- Agent development guide
+
+### Example Scripts (Local Only)
 
 ```bash
 # Intake Agent - Validate grant completeness
@@ -498,10 +540,3 @@ Output goes to `dist/` directory.
 3. Implement MCP communication layer
 4. Create orchestration logic
 5. Build frontend integration
-
-## Support
-
-For issues or questions, refer to:
-- Main project README: `../README.md`
-- API contracts: `../API-CONTRACTS.md`
-- Architecture docs: `../ARCHITECTURE.md`

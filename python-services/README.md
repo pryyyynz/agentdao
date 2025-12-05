@@ -1,6 +1,10 @@
 # Grantify Python Services
 
+🚀 **Live API**: [https://agentdao.onrender.com](https://agentdao.onrender.com)
+
 FastAPI-based evaluation microservice integrating AI agents (via Groq) for multi-dimensional grant analysis.
+
+> **Note**: This README covers the **production deployment**. For local development setup, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ## 🌟 Features
 
@@ -33,64 +37,68 @@ FastAPI-based evaluation microservice integrating AI agents (via Groq) for multi
 - [Deployment](#deployment)
 - [Troubleshooting](#troubleshooting)
 
-## 🚀 Quick Start
+## 🚀 Production API
 
-### Prerequisites
+### Live Service
 
-- Python 3.11+
-- PostgreSQL database
-- API keys for: Groq (AI), GitHub, Pinata (IPFS)
+**Base URL**: `https://agentdao.onrender.com`  
+**Documentation**: [https://agentdao.onrender.com/docs](https://agentdao.onrender.com/docs)  
+**Status**: ✅ Live on Render
 
-### 1. Clone and Setup
+### API Endpoints
 
+#### Health Check
 ```bash
-cd python-services
-
-# Create virtual environment
-python -m venv .venv
-
-# Activate virtual environment
-.\.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/Mac
-
-# Install dependencies
-pip install -r requirements.txt
+GET https://agentdao.onrender.com/health
 ```
 
-### 2. Configure Environment
-
-Copy the example environment file and add your API keys:
-
+#### Comprehensive Evaluation
 ```bash
-cp .env.example .env
+POST https://agentdao.onrender.com/api/v1/evaluate/comprehensive
+Content-Type: application/json
+X-API-Key: your-api-key
+
+{
+  "proposal": {
+    "grant_id": "grant-001",
+    "title": "Your Project",
+    "description": "Project description",
+    ...
+  }
+}
 ```
 
-Edit `.env` and add your keys:
+See full API documentation at: [https://agentdao.onrender.com/docs](https://agentdao.onrender.com/docs)
+
+### Production Configuration
 
 ```env
-# Required
-GROQ_API_KEY=your_groq_key_here
-DATABASE_URL=postgresql://user:password@localhost:5432/grantify
-
-# Optional but recommended
-GITHUB_API_KEY=your_github_token_here
-PINATA_API_KEY=your_pinata_key_here
-PINATA_SECRET_API_KEY=your_pinata_secret_here
+ENVIRONMENT=production
+DATABASE_URL=postgresql://[supabase-connection-string]
+GROQ_API_KEY=[configured]
+CORS_CUSTOM_ORIGINS=https://grantify-neon.vercel.app
+RESEND_FROM_EMAIL=onboarding@resend.dev
+MCP_SERVER_URL=https://agentdao-mcp-server.onrender.com
 ```
 
-### 3. Run the Server
+### Local Development
+
+To run the services locally or contribute:
 
 ```bash
-# Set Python path and run
-$env:PYTHONPATH = "$PWD"
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+cd python-services
 ```
 
-### 4. Test It!
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/python-services) for:
+- Installation and setup
+- API key configuration
+- Running development server
+- Testing procedures
 
-Visit http://localhost:8000/docs for interactive API documentation.
-
-## 📦 Installation
+## 🆕 Installation
 
 ### System Requirements
 
@@ -325,66 +333,69 @@ python-services/
 
 ## 🧪 Testing
 
-### Run Integration Tests
+### Production API Testing
+
+Test the live API:
 
 ```bash
-# Set Python path
-$env:PYTHONPATH = "$PWD"
+# Health check
+curl https://agentdao.onrender.com/health
 
-# Run all tests
-.\.venv\Scripts\python.exe scripts\test_integration.py
-```
-
-### Test Individual Services
-
-```bash
-# Test technical analyzer
-.\.venv\Scripts\python.exe services\technical_analyzer.py
-
-# Test impact analyzer
-.\.venv\Scripts\python.exe services\impact_analyzer.py
-
-# Test budget analyzer
-.\.venv\Scripts\python.exe services\budget_analyzer.py
-```
-
-### API Testing with cURL
-
-```bash
-# Test unified endpoint
-curl -X POST "http://localhost:8000/api/v1/evaluate/comprehensive" \
+# Test comprehensive evaluation
+curl -X POST "https://agentdao.onrender.com/api/v1/evaluate/comprehensive" \
   -H "Content-Type: application/json" \
-  -H "X-API-Key: dev-key-12345" \
+  -H "X-API-Key: your-api-key" \
   -d @test-proposal.json
-
-# Test health check
-curl "http://localhost:8000/health"
 ```
+
+### Interactive API Documentation
+
+Explore all endpoints at: [https://agentdao.onrender.com/docs](https://agentdao.onrender.com/docs)
+
+### Local Testing
+
+For running integration tests and unit tests locally, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local) which includes:
+- pytest test suite
+- Integration test scripts
+- Mock data generators
+- CI/CD configuration
 
 ## 🚢 Deployment
 
-### Local Development
+### Current Production Deployment
 
-```bash
-# Run with auto-reload
-$env:PYTHONPATH = "$PWD"
-.\.venv\Scripts\python.exe -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+**Platform**: Render  
+**URL**: [https://agentdao.onrender.com](https://agentdao.onrender.com)  
+**Status**: ✅ Live
 
-### Production
+**Deployment Details**:
+- Automatic deployments from `main` branch
+- Environment variables configured in Render dashboard
+- Health monitoring enabled
+- Auto-scaling based on load
 
-```bash
-# Run with production settings
-$env:ENVIRONMENT = "production"
-$env:PYTHONPATH = "$PWD"
-.\.venv\Scripts\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
-```
+### Deploying Your Own Instance
 
-### Docker (Optional)
+#### Option 1: Render (Recommended)
 
-```dockerfile
-# Coming soon - Docker container setup
-```
+1. Fork this repository
+2. Create new Web Service on [Render](https://render.com)
+3. Connect your GitHub repository
+4. Configure:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Python Version**: 3.11
+5. Add environment variables:
+   - `DATABASE_URL`
+   - `GROQ_API_KEY`
+   - `RESEND_API_KEY`
+   - `CORS_CUSTOM_ORIGINS`
+   - `MCP_SERVER_URL`
+6. Deploy
+
+#### Option 2: Self-Hosted
+
+For Docker, systemd, or other self-hosting methods, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
 
 ## 🔐 Authentication
 

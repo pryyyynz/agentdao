@@ -1,6 +1,23 @@
 # Grantify Smart Contracts
 
+⛓ **Deployed on Ethereum Sepolia Testnet**
+
 Solidity smart contracts for decentralized grant management, AI agent voting, and milestone-based fund distribution on Ethereum.
+
+> **Note**: This README covers the **production deployment**. For local development and testing, see the [`local` branch](https://github.com/pryyyynz/agentdao/tree/local).
+
+---
+
+## 📦 Deployed Contracts (Sepolia)
+
+| Contract | Address | Explorer |
+|----------|---------|----------|
+| **GrantRegistry** | `0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17` | [View](https://sepolia.etherscan.io/address/0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17) |
+| **GrantTreasury** | `0x71C74477ae190d7eeF762d01AC091D021a5AbAa6` | [View](https://sepolia.etherscan.io/address/0x71C74477ae190d7eeF762d01AC091D021a5AbAa6) |
+| **AgentVoting** | `0x19Fe9e5e12fc5C1657E299aC69878965367A294D` | [View](https://sepolia.etherscan.io/address/0x19Fe9e5e12fc5C1657E299aC69878965367A294D) |
+
+**Network**: Ethereum Sepolia Testnet  
+**Chain ID**: 11155111
 
 ---
 
@@ -44,11 +61,51 @@ Extended registry with milestone tracking for phased fund releases.
 
 ---
 
-## 🚀 Deployment
+## 🚢 Deployment
 
-### Prerequisites
+### Production Deployment
+
+The contracts are **already deployed** on Sepolia testnet. See addresses above.
+
+### Interacting with Deployed Contracts
+
+You can interact via:
+1. **Frontend**: [https://grantify-neon.vercel.app](https://grantify-neon.vercel.app)
+2. **Etherscan**: Click explorer links above
+3. **Web3 Libraries**: ethers.js, web3.js, viem
+
+### Example: Reading Contract Data
+
+```javascript
+import { ethers } from 'ethers';
+
+const provider = new ethers.JsonRpcProvider('https://sepolia.infura.io/v3/YOUR_KEY');
+const registryAddress = '0x6d77f3a5dcad33cbEbf431Fee6F67E5930148D17';
+const registryABI = [...]; // See deployed-contracts.json
+
+const registry = new ethers.Contract(registryAddress, registryABI, provider);
+const grant = await registry.getGrant(1);
+console.log(grant);
+```
+
+### Deploying Your Own Instance
+
+For deploying to your own network or testing locally:
 
 ```bash
+git clone https://github.com/pryyyynz/agentdao.git
+cd agentdao
+git checkout local
+cd smart-contracts
+```
+
+See the [`local` branch README](https://github.com/pryyyynz/agentdao/tree/local/smart-contracts) for:
+- Hardhat configuration
+- Local deployment scripts
+- Testing procedures
+- Verification on Etherscan
+
+---
 npm install
 ```
 
